@@ -16,7 +16,7 @@ import { Employee } from '../../model/class/Employee';
   styleUrl: './employee.component.css',
 })
 export class EmployeeComponent implements OnInit {
-  masterSev = inject(MasterService);
+  masterSrv = inject(MasterService);
 
   isFormVisible = signal<boolean>(false);
   parentDeptList = signal<IParentDept[]>([]);
@@ -33,20 +33,20 @@ export class EmployeeComponent implements OnInit {
   }
 
   getParentDept() {
-    this.masterSev.getAllDept().subscribe((res: IApiResponse) => {
+    this.masterSrv.getAllDept().subscribe((res: IApiResponse) => {
       this.parentDeptList.set(res.data);
     });
   }
 
   getAllEmployees() {
-    this.masterSev.getAllEmp().subscribe((res: Employee[]) => {
+    this.masterSrv.getAllEmp().subscribe((res: Employee[]) => {
       // console.log('Employees Data:', res);
       this.employeeList = res;
     });
   }
 
   onDeptChange() {
-    this.masterSev
+    this.masterSrv
       .getChildByDeptId(this.parentDeptId)
       .subscribe((res: IApiResponse) => {
         this.childDeptList.set(res.data);
@@ -55,7 +55,7 @@ export class EmployeeComponent implements OnInit {
 
   onSave() {
     debugger;
-    this.masterSev.saveEmployee(this.employeeObj).subscribe(
+    this.masterSrv.saveEmployee(this.employeeObj).subscribe(
       (res: IApiResponse) => {
         alert('Employee Created');
         this.getAllEmployees();
@@ -74,7 +74,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   onUpdate() {
-    this.masterSev.updateEmployee(this.employeeObj).subscribe(
+    this.masterSrv.updateEmployee(this.employeeObj).subscribe(
       (res: IApiResponse) => {
         alert('Employee Updated');
         this.getAllEmployees();
@@ -90,7 +90,7 @@ export class EmployeeComponent implements OnInit {
   onDelete(id: number) {
     const isDelete = confirm('Do U sure delete this employee');
     if (isDelete) {
-      this.masterSev.deleteEmployeeById(id).subscribe(
+      this.masterSrv.deleteEmployeeById(id).subscribe(
         (res: IApiResponse) => {
           if (res.data) {
             alert('Employee deleted');
@@ -108,5 +108,3 @@ export class EmployeeComponent implements OnInit {
     }
   }
 }
-
-// 1 : 02
